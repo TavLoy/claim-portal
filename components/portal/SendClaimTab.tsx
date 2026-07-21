@@ -131,7 +131,7 @@ export default function SendClaimTab({ venue }: Props) {
 
           <div className="space-y-1">
             <label className="text-xs text-gray-500">From</label>
-            <input type="text" value="Mani at TavLoy" disabled className="w-full px-3 py-2 text-sm border border-gray-100 rounded-lg bg-gray-50 text-gray-400" />
+            <input type="text" value="John at TavLoy" disabled className="w-full px-3 py-2 text-sm border border-gray-100 rounded-lg bg-gray-50 text-gray-400" />
           </div>
 
           <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
