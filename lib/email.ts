@@ -102,13 +102,13 @@ function buildClaimEmailHtml({
         <div class="feature-item">QR code to display at your venue</div>
       </div>
 
-      <a href="${claimUrl}" class="cta">Claim ${venue.name} →</a>
+      <a href="${claimUrl}" class="cta" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;background:#1D9E75;color:#ffffff;text-decoration:none;padding:14px 24px;border-radius:8px;font-size:15px;font-weight:600;margin:24px 0;">Claim ${venue.name} →</a>
 
       <p style="font-size:13px;color:#888780;">This link expires in 30 days. Your listing is live at tavloy.com/venues/${venueSlug}. If you'd like it removed, just reply to this email and we'll take it down within 24 hours.</p>
     </div>
 
     <div class="footer">
-      <p>TavLoy · Blackjack Media Ltd · United Kingdom</p>
+      <p>TavLoy · United Kingdom</p>
       <p><a href="${APP_URL}/unsubscribe">Unsubscribe</a> · <a href="${APP_URL}/privacy">Privacy policy</a></p>
     </div>
   </div>
