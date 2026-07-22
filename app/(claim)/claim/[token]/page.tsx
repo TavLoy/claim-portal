@@ -1,11 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { CheckCircle, Star, MapPin } from 'lucide-react'
 import { getInitials } from '@/lib/client-utils'
 
-type Step = 'loading' | 'error' | 'confirm' | 'profile' | 'hours' | 'done'
+type Step = 'loading' | 'error' | 'confirm' | 'done'
+
+const GOLD = '#CC9901'
+const GOLD_DARK = '#7a5c00'
+const GOLD_BG = '#FDF6E3'
 
 interface VenueData {
   id: string
@@ -18,17 +22,16 @@ interface VenueData {
   tagline: string | null
   google_rating: number | null
   cover_url: string | null
+  logo_url?: string | null
 }
 
 export default function ClaimPage() {
   const { token } = useParams<{ token: string }>()
-  const router = useRouter()
 
   const [step, setStep] = useState<Step>('loading')
   const [venue, setVenue] = useState<VenueData | null>(null)
   const [error, setError] = useState('')
 
-  // Form state
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -72,9 +75,11 @@ export default function ClaimPage() {
     return (
       <ClaimShell>
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div className="text-red-600 font-medium mb-2">This link isn't valid</div>
+          <div className="text-red-600 font-medium mb-2">This link isn&apos;t valid</div>
           <div className="text-sm text-red-500">{error}</div>
-          <p className="text-xs text-gray-400 mt-4">Email <a href="mailto:hello@tavloy.com" className="text-emerald-600 underline">hello@tavloy.com</a> and we'll send you a fresh link.</p>
+          <p className="text-xs text-gray-400 mt-4">
+            Email <a href="mailto:hello@tavloy.com" className="underline" style={{ color: GOLD }}>hello@tavloy.com</a> and we&apos;ll send you a fresh link.
+          </p>
         </div>
       </ClaimShell>
     )
@@ -83,22 +88,31 @@ export default function ClaimPage() {
   if (step === 'done') {
     return (
       <ClaimShell>
-        <div className="text-center py-8 space-y-4">
-          <CheckCircle className="mx-auto text-emerald-500" size={48} />
-          <h1 className="text-xl font-semibold">You're on TavLoy!</h1>
-          <p className="text-gray-500 text-sm max-w-sm mx-auto">
-            {venue?.name} is now live on the TavLoy app. You'll get an email with your dashboard link within 24 hours.
-          </p>
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-800 max-w-sm mx-auto space-y-1.5">
-            <div className="font-medium mb-2">What happens next:</div>
+        <div className="max-w-md mx-auto space-y-6">
+          <div className="text-center space-y-3 pt-2">
+            <CheckCircle className="mx-auto" size={44} style={{ color: GOLD }} />
+            <h1 className="text-xl font-semibold text-gray-900">You&apos;re on TavLoy!</h1>
+            <p className="text-gray-500 text-sm">
+              {venue?.name} is now live on the TavLoy app. You&apos;ll get an email with your dashboard link within 24 hours.
+            </p>
+          </div>
+
+          {/* Live listing preview, same styling as the admin's Listing Preview */}
+          {venue && <ListingCard venue={venue} tierFreemium />}
+
+          <div
+            className="rounded-xl p-4 text-sm space-y-1.5 border"
+            style={{ backgroundColor: GOLD_BG, borderColor: GOLD, color: GOLD_DARK }}
+          >
+            <div className="font-medium mb-1">What happens next:</div>
             {[
-              "Your listing goes live on the TavLoy app",
+              'Your listing goes live on the TavLoy app',
               "You'll receive your QR code by email",
-              "Your traffic dashboard will be ready within 24 hours",
+              'Your traffic dashboard will be ready within 24 hours',
               "We'll be in touch about upgrading to unlock Order at Table",
             ].map(item => (
               <div key={item} className="flex items-start gap-2">
-                <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+                <span className="font-bold mt-0.5" style={{ color: GOLD }}>✓</span>
                 <span>{item}</span>
               </div>
             ))}
@@ -111,36 +125,10 @@ export default function ClaimPage() {
   return (
     <ClaimShell>
       <div className="max-w-md mx-auto space-y-6">
-        {/* Venue card */}
-        {venue && (
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-            <div className="h-24 bg-gradient-to-br from-emerald-400 to-emerald-700 relative">
-              {venue.cover_url && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={venue.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
-              )}
-            </div>
-            <div className="p-4 flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-800 font-semibold text-sm flex-shrink-0 -mt-8 border-2 border-white">
-                {getInitials(venue.name)}
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">{venue.name}</div>
-                <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                  <MapPin size={11} /> {venue.address}
-                </div>
-                {venue.google_rating && (
-                  <div className="flex items-center gap-1 text-xs text-amber-700 mt-0.5">
-                    <Star size={11} fill="currentColor" /> {venue.google_rating}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        {venue && <ListingCard venue={venue} tierFreemium />}
 
         <div className="space-y-4">
-          <h1 className="text-lg font-semibold">Claim your listing</h1>
+          <h1 className="text-lg font-semibold text-gray-900">Claim your listing</h1>
           <p className="text-sm text-gray-500">Confirm your details below. It takes under 5 minutes.</p>
 
           <div className="space-y-3">
@@ -150,7 +138,8 @@ export default function ClaimPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@thevenue.co.uk"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{ ['--tw-ring-color' as string]: GOLD }}
               />
             </Field>
 
@@ -159,7 +148,8 @@ export default function ClaimPage() {
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{ ['--tw-ring-color' as string]: GOLD }}
               />
             </Field>
 
@@ -169,7 +159,8 @@ export default function ClaimPage() {
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 placeholder="01234 567890"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{ ['--tw-ring-color' as string]: GOLD }}
               />
             </Field>
 
@@ -179,29 +170,97 @@ export default function ClaimPage() {
                 onChange={e => setDescription(e.target.value)}
                 placeholder="A classic local boozer with great food and a beer garden…"
                 rows={3}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent resize-none"
+                style={{ ['--tw-ring-color' as string]: GOLD }}
               />
             </Field>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-600">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button
             onClick={handleClaim}
             disabled={submitting || !email.trim()}
-            className="w-full py-3 bg-emerald-600 text-white font-medium rounded-xl hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3 text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: GOLD }}
           >
             {submitting ? 'Claiming…' : `Claim ${venue?.name || 'your venue'} →`}
           </button>
 
           <p className="text-xs text-gray-400 text-center">
-            It's free. No card needed. You can delete your listing any time.
+            It&apos;s free. No card needed. You can delete your listing any time.
           </p>
         </div>
       </div>
     </ClaimShell>
+  )
+}
+
+/** Shared read-only listing card — keep this visually identical to the admin
+ *  Listing Preview tab so a claimed venue's page always matches what was
+ *  shown internally before approval. */
+function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?: boolean }) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+      <div className="relative h-28 bg-gray-900 rounded-b-[36px] overflow-hidden">
+        {venue.cover_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={venue.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
+      </div>
+
+      <div className="p-4 space-y-3">
+        {tierFreemium && (
+          <div
+            className="flex items-center gap-2 rounded-lg px-3 py-2 border text-xs"
+            style={{ backgroundColor: GOLD_BG, borderColor: GOLD, color: GOLD_DARK }}
+          >
+            Earn rewards not currently available at this venue
+          </div>
+        )}
+
+        <div className="flex items-start gap-3">
+          <div className="w-11 h-11 rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold text-xs flex-shrink-0 overflow-hidden">
+            {venue.logo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={venue.logo_url} alt="" className="w-full h-full object-contain bg-white" />
+            ) : (
+              getInitials(venue.name)
+            )}
+          </div>
+          <div className="min-w-0">
+            <div className="font-semibold text-sm truncate" style={{ color: GOLD }}>{venue.name}</div>
+            <span
+              className="inline-block text-[10px] px-2 py-0.5 rounded-full mt-1"
+              style={{ backgroundColor: GOLD_BG, color: GOLD_DARK }}
+            >
+              {venue.category}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <MapPin size={12} style={{ color: GOLD }} className="flex-shrink-0" />
+          <span className="truncate">{venue.address}</span>
+        </div>
+
+        {venue.google_rating && (
+          <div className="flex items-center gap-1 text-xs">
+            <Star size={12} className="text-amber-500" fill="currentColor" />
+            <span style={{ color: GOLD_DARK }} className="font-medium">{venue.google_rating}</span>
+          </div>
+        )}
+
+        {venue.tagline && (
+          <div className="bg-gray-50 rounded-lg px-3 py-2">
+            <p className="text-xs text-gray-500 leading-relaxed">{venue.tagline}</p>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -210,7 +269,7 @@ function ClaimShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white border-b border-gray-200 px-6 py-3">
         <span className="font-semibold text-gray-900">
-          Tav<span className="text-emerald-600">Loy</span>
+          Tav<span style={{ color: GOLD }}>Loy</span>
         </span>
       </nav>
       <div className="flex-1 px-4 py-8">{children}</div>
