@@ -41,6 +41,9 @@ export async function GET(req: NextRequest) {
       google_rating: venue.google_rating,
       cover_url: venue.cover_url,
       opening_hours: venue.opening_hours,
+      amenities: venue.amenities,
+      logo_url: venue.logo_url,
+      tier: venue.tier,
     }
   })
 }
