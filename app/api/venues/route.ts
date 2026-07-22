@@ -52,7 +52,7 @@ export async function PATCH(req: NextRequest) {
   }
 
   // Whitelist editable fields
-  const allowed = ['name', 'address', 'phone', 'email', 'website', 'tagline', 'category', 'description']
+  const allowed = ['name', 'address', 'phone', 'email', 'website', 'tagline', 'category', 'description', 'opening_hours', 'amenities', 'logo_url']
   const safeUpdates = Object.fromEntries(
     Object.entries(updates).filter(([k]) => allowed.includes(k))
   )
