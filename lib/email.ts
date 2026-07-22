@@ -53,25 +53,25 @@ function buildClaimEmailHtml({
   <style>
     body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f0; }
     .wrapper { max-width: 560px; margin: 32px auto; background: #ffffff; border-radius: 12px; overflow: hidden; }
-    .header { background: #085041; padding: 28px 32px; }
+    .header { background: #1a1208; padding: 28px 32px; }
     .header-logo { font-size: 18px; font-weight: 600; color: #ffffff; margin-bottom: 4px; }
-    .header-logo span { color: #5DCAA5; }
-    .header-sub { font-size: 13px; color: #9FE1CB; }
-    .venue-banner { background: #1D9E75; padding: 20px 32px; display: flex; align-items: center; gap: 16px; }
-    .venue-initials { width: 48px; height: 48px; border-radius: 10px; background: #E1F5EE; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #085041; flex-shrink: 0; }
+    .header-logo span { color: #E8C158; }
+    .header-sub { font-size: 13px; color: #d9c9a3; }
+    .venue-banner { background: #CC9901; padding: 20px 32px; display: flex; align-items: center; gap: 16px; }
+    .venue-initials { width: 48px; height: 48px; border-radius: 10px; background: #FDF6E3; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #7a5c00; flex-shrink: 0; }
     .venue-details { color: #ffffff; }
     .venue-name { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
-    .venue-addr { font-size: 13px; opacity: 0.8; }
+    .venue-addr { font-size: 13px; opacity: 0.85; }
     .body { padding: 32px; }
     .body p { font-size: 15px; line-height: 1.6; color: #3d3d3a; margin: 0 0 16px; }
-    .cta { display: block; text-align: center; background: #1D9E75; color: #ffffff; text-decoration: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 24px 0; }
-    .features { background: #f4f4f0; border-radius: 8px; padding: 20px; margin: 20px 0; }
-    .features p { font-size: 13px; font-weight: 600; color: #085041; margin: 0 0 10px; }
+    .cta { display: block; text-align: center; background: #CC9901; color: #ffffff; text-decoration: none; padding: 14px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; margin: 24px 0; }
+    .features { background: #FDF6E3; border-radius: 8px; padding: 20px; margin: 20px 0; border: 1px solid #f0dfa0; }
+    .features p { font-size: 13px; font-weight: 600; color: #7a5c00; margin: 0 0 10px; }
     .feature-item { font-size: 13px; color: #3d3d3a; margin: 0 0 6px; padding-left: 18px; position: relative; }
-    .feature-item::before { content: "✓"; position: absolute; left: 0; color: #1D9E75; font-weight: 600; }
+    .feature-item::before { content: "✓"; position: absolute; left: 0; color: #CC9901; font-weight: 600; }
     .footer { padding: 20px 32px; border-top: 1px solid #e8e8e4; }
     .footer p { font-size: 12px; color: #888780; margin: 0 0 4px; line-height: 1.5; }
-    .footer a { color: #0F6E56; text-decoration: none; }
+    .footer a { color: #7a5c00; text-decoration: none; }
   </style>
 </head>
 <body>
@@ -102,13 +102,13 @@ function buildClaimEmailHtml({
         <div class="feature-item">QR code to display at your venue</div>
       </div>
 
-      <a href="${claimUrl}" class="cta" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;background:#1D9E75;color:#ffffff;text-decoration:none;padding:14px 24px;border-radius:8px;font-size:15px;font-weight:600;margin:24px 0;">Claim ${venue.name} →</a>
+      <a href="${claimUrl}" class="cta" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;background:#CC9901;color:#ffffff;text-decoration:none;padding:14px 24px;border-radius:8px;font-size:15px;font-weight:600;margin:24px 0;">Claim ${venue.name} →</a>
 
       <p style="font-size:13px;color:#888780;">This link expires in 30 days. Your listing is live at tavloy.com/venues/${venueSlug}. If you'd like it removed, just reply to this email and we'll take it down within 24 hours.</p>
     </div>
 
     <div class="footer">
-      <p>TavLoy · United Kingdom</p>
+      <p>TavLoy · Blackjack Media Ltd · United Kingdom</p>
       <p><a href="${APP_URL}/unsubscribe">Unsubscribe</a> · <a href="${APP_URL}/privacy">Privacy policy</a></p>
     </div>
   </div>
