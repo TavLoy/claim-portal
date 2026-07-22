@@ -30,6 +30,7 @@ export interface Venue {
   cover_url: string | null
   category: string
   opening_hours: OpeningHours | null
+  amenities: string[] | null
 
   // Status
   status: VenueStatus
