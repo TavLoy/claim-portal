@@ -4,12 +4,29 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { CheckCircle, Star, MapPin } from 'lucide-react'
 import { getInitials } from '@/lib/client-utils'
+import type { OpeningHours } from '@/types'
 
 type Step = 'loading' | 'error' | 'confirm' | 'done'
 
 const GOLD = '#CC9901'
 const GOLD_DARK = '#7a5c00'
 const GOLD_BG = '#FDF6E3'
+
+const DAYS: { key: keyof OpeningHours; label: string }[] = [
+  { key: 'monday', label: 'Monday' },
+  { key: 'tuesday', label: 'Tuesday' },
+  { key: 'wednesday', label: 'Wednesday' },
+  { key: 'thursday', label: 'Thursday' },
+  { key: 'friday', label: 'Friday' },
+  { key: 'saturday', label: 'Saturday' },
+  { key: 'sunday', label: 'Sunday' },
+]
+
+const todayKey = (): keyof OpeningHours => {
+  const idx = new Date().getDay()
+  const map: (keyof OpeningHours)[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+  return map[idx]
+}
 
 interface VenueData {
   id: string
@@ -23,6 +40,9 @@ interface VenueData {
   google_rating: number | null
   cover_url: string | null
   logo_url?: string | null
+  amenities?: string[] | null
+  opening_hours?: OpeningHours | null
+  tier?: string
 }
 
 export default function ClaimPage() {
@@ -97,8 +117,7 @@ export default function ClaimPage() {
             </p>
           </div>
 
-          {/* Live listing preview, same styling as the admin's Listing Preview */}
-          {venue && <ListingCard venue={venue} tierFreemium />}
+          {venue && <ListingCard venue={venue} tierFreemium={venue.tier !== 'starter' && venue.tier !== 'growth' && venue.tier !== 'enterprise'} />}
 
           <div
             className="rounded-xl p-4 text-sm space-y-1.5 border"
@@ -125,7 +144,7 @@ export default function ClaimPage() {
   return (
     <ClaimShell>
       <div className="max-w-md mx-auto space-y-6">
-        {venue && <ListingCard venue={venue} tierFreemium />}
+        {venue && <ListingCard venue={venue} tierFreemium={venue.tier !== 'starter' && venue.tier !== 'growth' && venue.tier !== 'enterprise'} />}
 
         <div className="space-y-4">
           <h1 className="text-lg font-semibold text-gray-900">Claim your listing</h1>
@@ -200,6 +219,10 @@ export default function ClaimPage() {
  *  Listing Preview tab so a claimed venue's page always matches what was
  *  shown internally before approval. */
 function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?: boolean }) {
+  const today = todayKey()
+  const amenities = venue.amenities || []
+  const hours = venue.opening_hours
+
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
       <div className="relative h-28 bg-gray-900 rounded-b-[36px] overflow-hidden">
@@ -257,6 +280,45 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
         {venue.tagline && (
           <div className="bg-gray-50 rounded-lg px-3 py-2">
             <p className="text-xs text-gray-500 leading-relaxed">{venue.tagline}</p>
+          </div>
+        )}
+
+        {/* We offer */}
+        {amenities.length > 0 && (
+          <div className="space-y-1.5">
+            <div className="text-xs font-semibold text-gray-900">We offer</div>
+            <div className="flex flex-wrap gap-1.5">
+              {amenities.map(a => (
+                <span key={a} className="text-[10px] px-2.5 py-1 rounded-full bg-gray-50 border border-gray-200 text-gray-600">
+                  {a}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Opening hours */}
+        {hours && (
+          <div className="rounded-xl px-3 py-2.5 border" style={{ backgroundColor: GOLD_BG, borderColor: '#f0dfa0' }}>
+            <div className="text-xs font-semibold mb-1.5" style={{ color: GOLD }}>Opening Hours</div>
+            <div className="bg-white rounded-lg p-2.5 space-y-0.5">
+              {DAYS.map(({ key, label }) => {
+                const dh = hours[key]
+                if (!dh) return null
+                const isToday = key === today
+                return (
+                  <div key={key} className="flex justify-between text-[11px] py-0.5" style={{ borderTop: '0.5px solid #f5f5f0' }}>
+                    <span className={isToday ? 'font-semibold' : 'text-gray-500'} style={isToday ? { color: GOLD } : {}}>{label}</span>
+                    <span
+                      className={dh.closed ? 'text-gray-300' : isToday ? 'font-semibold' : 'text-gray-800'}
+                      style={isToday && !dh.closed ? { color: GOLD } : {}}
+                    >
+                      {dh.closed ? 'Closed' : `${dh.open} - ${dh.close}`}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>
