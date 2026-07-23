@@ -77,7 +77,7 @@ function buildClaimEmailHtml({
 <body>
   <div class="wrapper">
     <div class="header">
-      <div class="header-logo">Tav<span>Loy</span></div>
+      <img src="${APP_URL}/tavloy-logo-white.png" alt="TavLoy" width="140" style="display:block;margin-bottom:6px;" />
       <div class="header-sub">Digital loyalty &amp; guest engagement</div>
     </div>
 
