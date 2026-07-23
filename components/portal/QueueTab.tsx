@@ -20,7 +20,7 @@ const STATUS_FILTERS: { label: string; value: VenueStatus | 'all' }[] = [
 
 const STATUS_COLORS: Record<VenueStatus, string> = {
   pending: 'bg-amber-100 text-amber-800',
-  approved: 'bg-emerald-100 text-emerald-800',
+  approved: 'bg-gold-100 text-gold-800',
   claimed: 'bg-purple-100 text-purple-800',
   rejected: 'bg-red-100 text-red-800',
 }
@@ -75,7 +75,7 @@ export default function QueueTab({ onPreview, onSendClaim }: Props) {
           {[
             { label: 'Total', val: stats.total, color: 'text-gray-900' },
             { label: 'Pending', val: stats.pending, color: 'text-amber-700' },
-            { label: 'Approved', val: stats.approved, color: 'text-emerald-700' },
+            { label: 'Approved', val: stats.approved, color: 'text-gold-700' },
             { label: 'Claimed', val: stats.claimed, color: 'text-purple-700' },
             { label: 'Rejected', val: stats.rejected, color: 'text-red-700' },
           ].map(s => (
@@ -95,7 +95,7 @@ export default function QueueTab({ onPreview, onSendClaim }: Props) {
             onClick={() => setFilter(f.value)}
             className={`px-3 py-1 text-xs rounded-full border transition-colors
               ${filter === f.value
-                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                ? 'bg-gold-100 text-gold-800 border-gold-300'
                 : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
               }`}
           >
@@ -130,7 +130,7 @@ export default function QueueTab({ onPreview, onSendClaim }: Props) {
             >
               <div className="flex items-start gap-3">
                 {/* Avatar */}
-                <div className="w-11 h-11 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-800 font-medium text-sm flex-shrink-0">
+                <div className="w-11 h-11 rounded-lg bg-gold-100 flex items-center justify-center text-gold-800 font-medium text-sm flex-shrink-0">
                   {getInitials(venue.name)}
                 </div>
 
@@ -174,7 +174,7 @@ export default function QueueTab({ onPreview, onSendClaim }: Props) {
                     <button
                       onClick={() => handleApprove(venue)}
                       disabled={actionLoading === venue.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-emerald-300 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gold-300 bg-gold-50 text-gold-700 rounded-lg hover:bg-gold-100 transition-colors disabled:opacity-50"
                     >
                       <Check size={12} /> Approve
                     </button>
@@ -191,7 +191,7 @@ export default function QueueTab({ onPreview, onSendClaim }: Props) {
                 {venue.status === 'approved' && (
                   <button
                     onClick={() => onSendClaim(venue)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-emerald-300 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-gold-300 bg-gold-50 text-gold-700 rounded-lg hover:bg-gold-100 transition-colors"
                   >
                     <Mail size={12} /> Send claim email
                   </button>

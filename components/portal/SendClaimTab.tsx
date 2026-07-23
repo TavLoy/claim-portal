@@ -62,21 +62,20 @@ export default function SendClaimTab({ venue }: Props) {
         <h2 className="text-sm font-medium text-gray-700 mb-3">Email preview</h2>
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden text-sm">
           {/* Header */}
-          <div className="bg-emerald-900 px-5 py-4">
-            <div className="font-semibold text-white text-base">
-              Tav<span className="text-emerald-400">Loy</span>
-            </div>
-            <div className="text-emerald-300 text-xs mt-0.5">Digital loyalty & guest engagement</div>
+          <div className="bg-[#1a1208] px-5 py-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/tavloy-logo-white.png" alt="TavLoy" className="h-6 w-auto mb-1" />
+            <div className="text-gold-300 text-xs mt-0.5">Digital loyalty & guest engagement</div>
           </div>
 
           {/* Venue banner */}
-          <div className="bg-emerald-600 px-5 py-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-800 font-semibold text-sm flex-shrink-0">
+          <div className="bg-gold-600 px-5 py-3 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gold-100 flex items-center justify-center text-gold-800 font-semibold text-sm flex-shrink-0">
               {getInitials(venue.name)}
             </div>
             <div>
               <div className="text-white font-medium text-sm">{venue.name}</div>
-              <div className="text-emerald-200 text-xs">{venue.address}</div>
+              <div className="text-gold-200 text-xs">{venue.address}</div>
             </div>
           </div>
 
@@ -88,15 +87,15 @@ export default function SendClaimTab({ venue }: Props) {
             </p>
 
             <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
-              <p className="text-xs font-semibold text-emerald-800">Your free listing includes:</p>
+              <p className="text-xs font-semibold text-gold-800">Your free listing includes:</p>
               {['Venue profile on the TavLoy app', 'Digital loyalty stamp card', 'Basic traffic dashboard', 'QR code for your venue'].map(f => (
                 <div key={f} className="text-xs text-gray-600 flex items-center gap-1.5">
-                  <span className="text-emerald-600 font-bold">✓</span> {f}
+                  <span className="text-gold-600 font-bold">✓</span> {f}
                 </div>
               ))}
             </div>
 
-            <div className="bg-emerald-600 text-white text-center py-2.5 rounded-lg text-sm font-medium">
+            <div className="bg-gold-600 text-white text-center py-2.5 rounded-lg text-sm font-medium">
               Claim {venue.name} →
             </div>
 
@@ -122,7 +121,7 @@ export default function SendClaimTab({ venue }: Props) {
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="info@thevenue.co.uk"
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
             />
             {!venue.email && (
               <p className="text-xs text-amber-600">No email from Google Places — enter manually above.</p>
@@ -138,7 +137,7 @@ export default function SendClaimTab({ venue }: Props) {
             <div className="text-xs font-medium text-gray-700">Listing status</div>
             <div className="text-xs text-gray-600">
               {venue.name} ·{' '}
-              <span className={`font-medium ${venue.status === 'approved' ? 'text-emerald-700' : 'text-purple-700'}`}>
+              <span className={`font-medium ${venue.status === 'approved' ? 'text-gold-700' : 'text-purple-700'}`}>
                 {venue.status}
               </span>
             </div>
@@ -159,14 +158,14 @@ export default function SendClaimTab({ venue }: Props) {
           )}
 
           {sent ? (
-            <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 text-sm">
+            <div className="flex items-center gap-2 text-gold-700 bg-gold-50 border border-gold-200 rounded-lg px-3 py-2 text-sm">
               <CheckCircle size={15} /> Sent to {email}
             </div>
           ) : (
             <button
               onClick={handleSend}
               disabled={sending || venue.status === 'claimed'}
-              className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2.5 bg-gold-600 text-white text-sm font-medium rounded-lg hover:bg-gold-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <Mail size={14} />
               {sending ? 'Sending…' : venue.status === 'claimed' ? 'Already claimed' : 'Send claim email'}

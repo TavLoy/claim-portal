@@ -79,12 +79,12 @@ export default function SearchTab({ onImported }: Props) {
             onChange={e => setLocation(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
             placeholder="Location — e.g. Birmingham B1 or Dudley"
-            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent"
           />
           <select
             value={type}
             onChange={e => setType(e.target.value)}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
           >
             {VENUE_TYPES.map(t => <option key={t}>{t}</option>)}
           </select>
@@ -93,13 +93,13 @@ export default function SearchTab({ onImported }: Props) {
             value={radius}
             onChange={e => setRadius(e.target.value)}
             min="1" max="20"
-            className="w-24 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-24 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
             placeholder="Radius km"
           />
           <button
             onClick={handleSearch}
             disabled={loading}
-            className="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-5 py-2 bg-gold-600 text-white text-sm font-medium rounded-lg hover:bg-gold-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {loading ? 'Searching…' : 'Search'}
           </button>
@@ -128,7 +128,7 @@ export default function SearchTab({ onImported }: Props) {
                   onClick={() => !place.already_imported && toggleSelect(place.place_id)}
                   className={`flex items-center gap-3 bg-white border rounded-xl px-4 py-3 transition-colors
                     ${place.already_imported ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-gray-300'}
-                    ${isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200'}
+                    ${isSelected ? 'border-gold-500 bg-gold-50' : 'border-gray-200'}
                   `}
                 >
                   <input
@@ -136,7 +136,7 @@ export default function SearchTab({ onImported }: Props) {
                     checked={isSelected}
                     disabled={place.already_imported}
                     onChange={() => toggleSelect(place.place_id)}
-                    className="accent-emerald-600 w-4 h-4 flex-shrink-0 cursor-pointer"
+                    className="accent-gold-600 w-4 h-4 flex-shrink-0 cursor-pointer"
                     onClick={e => e.stopPropagation()}
                   />
                   <div className="flex-1 min-w-0">
@@ -154,7 +154,7 @@ export default function SearchTab({ onImported }: Props) {
                     {place.already_imported ? (
                       <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">Already imported</span>
                     ) : (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Not listed</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-gold-100 text-gold-700">Not listed</span>
                     )}
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function SearchTab({ onImported }: Props) {
             <button
               onClick={handleImport}
               disabled={selected.size === 0 || importing}
-              className="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-5 py-2 bg-gold-600 text-white text-sm font-medium rounded-lg hover:bg-gold-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {importing ? 'Importing…' : `Import ${selected.size > 0 ? selected.size : ''} to review queue`}
             </button>
