@@ -106,8 +106,12 @@ export async function POST(req: NextRequest) {
     actor_email: email,
   })
 
-  // Fire-and-forget internal notification — don't block the response on it
-  sendClaimNotification({ ...venue, name: name || venue.name }, email)
+// Awaited (not fire-and-forget) — serverless functions can freeze/terminate
+// immediately after the response is returned, which would kill an un-awaited
+// request before Resend actually received it.
+await sendClaimNotification({ ...venue, name: name || venue.name }, email)
+
+  
 
   return NextResponse.json({ success: true, venue_id: venue.id })
 }
