@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { CheckCircle, Star, MapPin } from 'lucide-react'
+import { CheckCircle, Star, MapPin, ChevronLeft, Signal, BatteryFull } from 'lucide-react'
 import { getInitials } from '@/lib/client-utils'
 import type { OpeningHours } from '@/types'
 
@@ -43,6 +43,8 @@ interface VenueData {
   amenities?: string[] | null
   opening_hours?: OpeningHours | null
   tier?: string
+  lat?: number | null
+  lng?: number | null
 }
 
 export default function ClaimPage() {
@@ -102,7 +104,7 @@ export default function ClaimPage() {
           <div className="text-red-600 font-medium mb-2">This link isn&apos;t valid</div>
           <div className="text-sm text-red-500">{error}</div>
           <p className="text-xs text-gray-400 mt-4">
-            Email <a href="mailto:hello@tavloy.com" className="underline" style={{ color: GOLD }}>hello@tavloy.com</a> and we&apos;ll send you a fresh link.
+            Email <a href="mailto:hello@tavloy.com" className="underline" style={{ color: GOLD }}>hello@tavloy.com</a>{' '}and we&apos;ll send you a fresh link.
           </p>
         </div>
       )}
@@ -224,17 +226,38 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
   const today = todayKey()
   const amenities = venue.amenities || []
   const hours = venue.opening_hours
+  const hasCoords = venue.lat != null && venue.lng != null
+  const mapsDirectionsUrl = hasCoords
+    ? `https://www.google.com/maps/dir/?api=1&destination=${venue.lat},${venue.lng}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address)}`
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-      <div className="relative h-24 bg-gray-900 rounded-b-[28px] overflow-hidden">
-        {venue.cover_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={venue.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
+      {/* Header photo — wide single-scoop curve with a thin gold stroke, matching the live app */}
+      <div className="relative">
+        <div
+          className="relative h-40 bg-gray-900 overflow-hidden"
+          style={{
+            borderBottomLeftRadius: 110,
+            borderBottomRightRadius: 110,
+            borderLeft: `2px solid ${GOLD}`,
+            borderRight: `2px solid ${GOLD}`,
+            borderBottom: `2px solid ${GOLD}`,
+          }}
+        >
+          {venue.cover_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={venue.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/35" />
+
+          <div className="absolute top-2.5 left-2.5 w-7 h-7 rounded-full bg-black/45 flex items-center justify-center">
+            <ChevronLeft size={15} className="text-white" />
+          </div>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-full bg-white/90" />
+        </div>
       </div>
 
       <div className="p-3 space-y-2.5">
@@ -321,6 +344,26 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
             </div>
           </div>
         )}
+
+        {/* Get directions — real static map, linked out to Google */}
+        {hasCoords && (
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-gray-900">Get Directions to Us</span>
+              <a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] font-medium" style={{ color: GOLD }}>
+                Open location
+              </a>
+            </div>
+            <a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className="block rounded-lg overflow-hidden border border-gray-100">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/api/static-map?lat=${venue.lat}&lng=${venue.lng}&w=400&h=140`}
+                alt="Map"
+                className="w-full h-24 object-cover"
+              />
+            </a>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -337,7 +380,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
 }
 
 /** Phone bezel wrapper — same construction as the admin Listing Preview tab,
- *  so a venue's claim page renders inside an identical device frame. */
+ *  no dynamic-island notch, real status icons, matching the live app style. */
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ width: 328 }}>
@@ -348,13 +391,15 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
         <div className="absolute -right-[2px] top-[90px] w-[3px] h-9 bg-[#222] rounded-l" />
 
         <div className="bg-white rounded-[34px] overflow-hidden relative">
-          <div className="absolute top-0 inset-x-0 flex items-center justify-between px-5 pt-2 text-[11px] font-medium z-10 pointer-events-none">
-            <span className="text-gray-800">9:41</span>
-            <span className="flex items-center gap-1 text-gray-800 text-[10px]">📶 🔋</span>
+          <div className="flex items-center justify-between px-5 pt-2.5 pb-1 text-[13px] font-medium">
+            <span className="text-gray-900">9:41</span>
+            <span className="flex items-center gap-1.5 text-gray-800">
+              <Signal size={13} />
+              <BatteryFull size={16} className="text-green-600" />
+            </span>
           </div>
-          <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-full z-10" />
 
-          <div className="h-[600px] overflow-y-auto scrollbar-none pt-7">
+          <div className="h-[590px] overflow-y-auto scrollbar-none">
             {children}
           </div>
         </div>
