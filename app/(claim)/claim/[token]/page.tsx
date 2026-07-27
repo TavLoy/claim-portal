@@ -113,9 +113,9 @@ export default function ClaimPage() {
         <PhoneFrame>
           <div className="text-center px-4 pt-6 pb-4 space-y-2">
             <CheckCircle className="mx-auto" size={40} style={{ color: GOLD }} />
-            <h1 className="text-base font-semibold text-gray-900">You&apos;re on TavLoy!</h1>
+            <h1 className="text-base font-semibold text-gray-900">You&apos;re almost there!</h1>
             <p className="text-gray-500 text-xs px-2">
-              {venue.name} is now live on the TavLoy app. You&apos;ll get an email with your dashboard link within 24 hours.
+              {venue.name} will be live on the TavLoy app soon. You&apos;ll get a confirmation email with your dashboard link within 24 hours.
             </p>
           </div>
           <div className="px-3.5">
@@ -129,9 +129,8 @@ export default function ClaimPage() {
               <div className="font-medium mb-1">What happens next:</div>
               {[
                 'Your listing goes live on the TavLoy app',
-                "You'll receive your QR code by email",
                 'Your traffic dashboard will be ready within 24 hours',
-                "We'll be in touch about upgrading to unlock Order at Table",
+                "We'll be in touch about upgrading to unlock other great features such as rewards engine, live local push alerts, in-app games & trivia, digital vouchers/gifts, order & pay at table, call waiter buzzer and table booking.",
               ].map(item => (
                 <div key={item} className="flex items-start gap-2">
                   <span className="font-bold mt-0.5" style={{ color: GOLD }}>✓</span>
@@ -373,7 +372,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-10 w-auto mb-8" />
+      <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-16 w-auto mb-8" />
       {children}
     </div>
   )
