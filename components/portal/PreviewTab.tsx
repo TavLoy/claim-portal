@@ -107,7 +107,9 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
   }
 
   const isFreemium = initialVenue.tier === 'freemium'
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+  const mapsUrl = initialVenue.lat != null && initialVenue.lng != null
+    ? `https://www.google.com/maps/dir/?api=1&destination=${initialVenue.lat},${initialVenue.lng}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
   const today = todayKey()
 
   return (
@@ -383,19 +385,25 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
                     </div>
                   </div>
 
-                  {/* Get directions */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-900">Get Directions to Us</span>
-                    <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] font-medium" style={{ color: GOLD }}>
-                      Open location
-                    </a>
-                  </div>
-                  <div className="rounded-xl overflow-hidden border border-gray-100 h-24 bg-gray-100 flex items-center justify-center relative">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#e8f0e0_0%,#f5f5f0_70%)]" />
-                    <div className="relative w-6 h-6 rounded-full bg-red-500 flex items-center justify-center shadow">
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    </div>
-                  </div>
+                  {/* Get directions — real static map, linked out to Google */}
+                  {initialVenue.lat != null && initialVenue.lng != null && (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-gray-900">Get Directions to Us</span>
+                        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] font-medium" style={{ color: GOLD }}>
+                          Open location
+                        </a>
+                      </div>
+                      <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="block rounded-xl overflow-hidden border border-gray-100">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`/api/static-map?lat=${initialVenue.lat}&lng=${initialVenue.lng}&w=400&h=140`}
+                          alt="Map"
+                          className="w-full h-24 object-cover"
+                        />
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
