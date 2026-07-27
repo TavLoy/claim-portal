@@ -115,7 +115,8 @@ export default function ClaimPage() {
             <CheckCircle className="mx-auto" size={40} style={{ color: GOLD }} />
             <h1 className="text-base font-semibold text-gray-900">You&apos;re almost there!</h1>
             <p className="text-gray-500 text-xs px-2">
-              {venue.name} will be live on the TavLoy app soon. You&apos;ll get a confirmation email with your dashboard link within 24 hours.
+              {venue.name}{' '}will be live on the TavLoy app soon. You&apos;ll get a confirmation email with your dashboard link within 24 hours.
+            
             </p>
           </div>
           <div className="px-3.5">
