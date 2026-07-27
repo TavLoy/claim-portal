@@ -24,7 +24,7 @@ export async function sendClaimEmail(venue: Venue): Promise<{ success: boolean; 
     await resend.emails.send({
       from: FROM,
       to: venue.email,
-      subject: `${venue.name} is on TavLoy — claim your free listing`,
+      subject: `Get discovered on TavLoy — claim your free listing`,
       html,
     })
     return { success: true }
