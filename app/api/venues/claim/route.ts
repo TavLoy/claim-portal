@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { sendClaimNotification } from '@/lib/email'
 
 // GET /api/venues/claim?token=xxx — validate token, return venue data
 export async function GET(req: NextRequest) {
@@ -44,6 +45,8 @@ export async function GET(req: NextRequest) {
       amenities: venue.amenities,
       logo_url: venue.logo_url,
       tier: venue.tier,
+      lat: venue.lat,
+      lng: venue.lng,
     }
   })
 }
@@ -102,6 +105,9 @@ export async function POST(req: NextRequest) {
     metadata: { claimed_by_email: email },
     actor_email: email,
   })
+
+  // Fire-and-forget internal notification — don't block the response on it
+  sendClaimNotification({ ...venue, name: name || venue.name }, email)
 
   return NextResponse.json({ success: true, venue_id: venue.id })
 }
