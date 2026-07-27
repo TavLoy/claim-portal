@@ -1,12 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle } from 'lucide-react'
 
 const GOLD = '#CC9901'
 
 export default function UnsubscribePage() {
+  return (
+    <Suspense fallback={<PageShell><div className="text-sm text-gray-400">Loading…</div></PageShell>}>
+      <UnsubscribeContent />
+    </Suspense>
+  )
+}
+
+function UnsubscribeContent() {
   const params = useSearchParams()
   const email = params.get('email') || ''
   const [done, setDone] = useState(false)
@@ -31,10 +39,7 @@ export default function UnsubscribePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-9 w-auto mb-8" />
-
+    <PageShell>
       <div className="max-w-sm w-full bg-white border border-gray-200 rounded-2xl p-6 text-center">
         {done ? (
           <>
@@ -62,6 +67,16 @@ export default function UnsubscribePage() {
           </>
         )}
       </div>
+    </PageShell>
+  )
+}
+
+function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-9 w-auto mb-8" />
+      {children}
     </div>
   )
 }
