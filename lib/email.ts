@@ -24,7 +24,7 @@ export async function sendClaimEmail(venue: Venue): Promise<{ success: boolean; 
     await resend.emails.send({
       from: FROM,
       to: venue.email,
-      subject: `Get discovered on TavLoy — claim your free listing`,
+      subject: 'Get discovered on TavLoy — claim your free listing',
       html,
     })
     return { success: true }
@@ -125,8 +125,8 @@ function buildClaimEmailHtml({
     </table>
 
     <div class="body">
-      <p>Right now, thousands of people across the UK are using TavLoy — the fastest-growing loyalty and discovery app in UK hospitality — to find their next pub, bar, café or night out. <strong>${venue.name}</strong> is already on it.</p>
-      <p>Venues that claim their free listing early are the ones getting seen, followed, and chosen first. The longer you wait, the more of that early attention goes to someone else nearby instead.</p>
+      <p>Currently, thousands of people across the UK are using TavLoy — the fastest-growing digital engagement and discovery app in UK hospitality — to find their next pub, bar, café, restaurant or club.</p>
+      <p><strong>Do you want to see ${venue.name} on the app?</strong><br />Venues that claim their FREE listing early are the ones getting seen, followed, and chosen first. The longer you wait, the more of that early attention goes to someone else nearby instead.</p>
       <p>Claiming takes under 5 minutes and it's completely free.</p>
 
       <div class="features">
@@ -158,7 +158,7 @@ function buildClaimEmailHtml({
 
     <div class="footer">
       <p>TavLoy · United Kingdom</p>
-      <p><a href="${unsubscribeUrl}">Unsubscribe</a> · <a href="${APP_URL}/privacy">Privacy policy</a></p>
+      <p><a href="${unsubscribeUrl}">Unsubscribe</a> · <a href="https://www.tavloy.com/privacy-policy/">Privacy policy</a></p>
     </div>
   </div>
 </body>
