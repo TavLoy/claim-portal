@@ -48,6 +48,20 @@ export async function POST(req: NextRequest) {
       .eq('id', venue_id)
   }
 
+  // Respect unsubscribes — never send outreach to a suppressed address
+  const { data: suppressed } = await supabaseAdmin
+    .from('email_suppressions')
+    .select('email')
+    .eq('email', emailToUse.toLowerCase().trim())
+    .maybeSingle()
+
+  if (suppressed) {
+    return NextResponse.json(
+      { error: `${emailToUse} has unsubscribed from TavLoy outreach emails — not sending.` },
+      { status: 409 }
+    )
+  }
+
   const result = await sendClaimEmail({ ...venue, email: emailToUse })
 
   if (!result.success) {
