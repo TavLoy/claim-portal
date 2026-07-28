@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { CheckCircle, Star, MapPin, ChevronLeft, Signal, BatteryFull } from 'lucide-react'
+import { CheckCircle, Star, MapPin, Signal, BatteryFull } from 'lucide-react'
+import HeaderCurveImage from '@/components/shared/HeaderCurveImage'
 import { getInitials } from '@/lib/client-utils'
 import type { OpeningHours } from '@/types'
 
@@ -116,7 +117,6 @@ export default function ClaimPage() {
             <h1 className="text-base font-semibold text-gray-900">You&apos;re almost there!</h1>
             <p className="text-gray-500 text-xs px-2">
               {venue.name}{' '}will be live on the TavLoy app soon. You&apos;ll get a confirmation email with your dashboard link within 24 hours.
-            
             </p>
           </div>
           <div className="px-3.5">
@@ -233,32 +233,7 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-      {/* Header photo — wide single-scoop curve with a thin gold stroke, matching the live app */}
-      <div className="relative">
-        <div
-          className="relative h-40 bg-gray-900 overflow-hidden"
-          style={{
-            borderBottomLeftRadius: 110,
-            borderBottomRightRadius: 110,
-            borderLeft: `2px solid ${GOLD}`,
-            borderRight: `2px solid ${GOLD}`,
-            borderBottom: `2px solid ${GOLD}`,
-          }}
-        >
-          {venue.cover_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={venue.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/35" />
-
-          <div className="absolute top-2.5 left-2.5 w-7 h-7 rounded-full bg-black/45 flex items-center justify-center">
-            <ChevronLeft size={15} className="text-white" />
-          </div>
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-6 h-1.5 rounded-full bg-white/90" />
-        </div>
-      </div>
+      <HeaderCurveImage coverUrl={venue.cover_url} height={160} />
 
       <div className="p-3 space-y-2.5">
         {tierFreemium && (
@@ -310,7 +285,7 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
 
         {amenities.length > 0 && (
           <div className="space-y-1">
-            <div className="text-[10px] font-semibold text-gray-900">We offer</div>
+            <div className="text-[10px] font-semibold" style={{ color: GOLD }}>We offer</div>
             <div className="flex flex-wrap gap-1">
               {amenities.map(a => (
                 <span key={a} className="text-[9px] px-2 py-0.5 rounded-full bg-gray-50 border border-gray-200 text-gray-600">
@@ -349,7 +324,7 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
         {hasCoords && (
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold text-gray-900">Get Directions to Us</span>
+              <span className="text-[10px] font-semibold" style={{ color: GOLD }}>Get Directions to Us</span>
               <a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] font-medium" style={{ color: GOLD }}>
                 Open location
               </a>
@@ -371,9 +346,9 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
 
 function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
+    <div className="min-h-screen bg-[#111] flex flex-col items-center py-10 px-4">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-16 w-auto mb-8" />
+      <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-24 w-auto mb-8" />
       {children}
     </div>
   )
