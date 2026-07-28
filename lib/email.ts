@@ -90,7 +90,7 @@ function buildClaimEmailHtml({
     .features { background: #FDF6E3; border-radius: 8px; padding: 20px; margin: 20px 0; border: 1px solid #f0dfa0; }
     .features p { font-size: 13px; font-weight: 600; color: #7a5c00; margin: 0 0 10px; }
     .feature-item { font-size: 13px; color: #3d3d3a; margin: 0 0 6px; padding-left: 18px; position: relative; }
-    .feature-item::before { content: "✓"; position: absolute; left: 0; color: #CC9901; font-weight: 600; }
+    .feature-item::before { content: "✓"; position: absolute; left: 0; color: #16A34A; font-weight: 700; }
     .disclaimer { font-size: 12px; color: #7a5c00; background: #FDF6E3; border-radius: 8px; padding: 12px 16px; margin: 20px 0; }
     .footer { padding: 20px 32px; border-top: 1px solid #e8e8e4; }
     .footer p { font-size: 12px; color: #888780; margin: 0 0 4px; line-height: 1.5; }
@@ -101,7 +101,7 @@ function buildClaimEmailHtml({
   <div class="wrapper">
     <div class="header">
       <img src="${APP_URL}/tavloy-logo-white.png" alt="TavLoy" width="140" style="display:block;" />
-      <div class="header-sub">AI powered digital engagement platform built for pubs, bars, cafes, restaurants, hotels and music venues</div>
+      <div class="header-sub">AI powered digital engagement platform built for pubs, bars, cafes, restaurants, hotels and music venues.</div>
     </div>
 
     <!-- Venue banner — table layout for reliable spacing across mail clients -->
@@ -125,16 +125,21 @@ function buildClaimEmailHtml({
     </table>
 
     <div class="body">
-      <p>Currently, thousands of people across the UK are using TavLoy — the fastest-growing digital engagement and discovery app in UK hospitality — to find their next pub, bar, café, restaurant or club.</p>
-      <p><strong>Do you want to see ${venue.name} on the app?</strong><br />Venues that claim their FREE listing early are the ones getting seen, followed, and chosen first. The longer you wait, the more of that early attention goes to someone else nearby instead.</p>
-      <p>Claiming takes under 5 minutes and it's completely free.</p>
+      <p><strong>Put ${venue.name} in front of customers looking for their next favourite venue.</strong></p>
+      <p>TavLoy is changing the way people discover and engage with pubs, bars, cafés, restaurants, hotels and clubs across the UK. By claiming your FREE venue profile, you'll increase your visibility, attract new customers and give existing customers more reasons to come back.</p>
+      <p><strong>Is ${venue.name} listed yet?</strong></p>
+      <p>Early adopters are already building their presence on TavLoy, growing followers and getting discovered first. Every day you wait is another opportunity for nearby venues to get ahead.</p>
+      <p>Customers are already discovering venues on TavLoy. Don't let yours be the one they miss. Thousands of people will decide where to eat, drink and stay next. Make sure they find your venue first.</p>
+      <p>Claiming your venue takes less than 5 minutes and is completely FREE.</p>
 
       <div class="features">
         <p>Your free listing includes:</p>
         <div class="feature-item">Your venue profile on the TavLoy app</div>
-        <div class="feature-item">Basic traffic dashboard (views, scans, taps)</div>
+        <div class="feature-item">Basic traffic dashboard (views &amp; clicks)</div>
         <div class="feature-item">Google Maps Integration</div>
       </div>
+
+      <p style="text-align:center;font-weight:600;color:#1a1208;">Claim your FREE listing today.</p>
 
       <!-- Bulletproof button: table + solid background cell, works across Outlook/Hotmail -->
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px auto;">
