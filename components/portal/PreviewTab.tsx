@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Star, MapPin, Phone, Mail, Globe, ChevronLeft, Info, Navigation, ChevronUp, X } from 'lucide-react'
+import { Star, MapPin, Phone, Mail, Globe, Info, ChevronUp } from 'lucide-react'
 import type { Venue, OpeningHours, DayHours } from '@/types'
 import { getInitials } from '@/lib/client-utils'
+import HeaderCurveImage from '@/components/shared/HeaderCurveImage'
 
 interface Props {
   venue: Venue | null
@@ -236,36 +237,17 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
             <div className="absolute -right-[2px] top-[90px] w-[3px] h-9 bg-[#222] rounded-l" />
 
             <div className="bg-white rounded-[34px] overflow-hidden">
-              {/* status bar sits over the photo */}
-              <div className="h-[560px] overflow-y-auto scrollbar-none">
-                {/* Header photo */}
-                <div className="relative h-40 bg-gray-900 overflow-hidden rounded-b-[42px]">
-                  {initialVenue.cover_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={initialVenue.cover_url} alt="Cover" className="absolute inset-0 w-full h-full object-cover" />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
+              {/* status bar sits above the photo, matching the claim page's phone frame */}
+              <div className="flex items-center justify-between px-5 pt-2.5 pb-1 text-[13px] font-medium">
+                <span className="text-gray-900">9:41</span>
+                <span className="flex items-center gap-1.5 text-gray-800">
+                  <span className="text-[13px]">📶</span>
+                  <span className="text-[16px]">🔋</span>
+                </span>
+              </div>
 
-                  {/* status bar */}
-                  <div className="absolute top-0 inset-x-0 flex items-center justify-between px-5 pt-2 text-white text-[11px] font-medium">
-                    <span>9:41</span>
-                    <span className="flex items-center gap-1">
-                      <span className="text-[10px]">📶</span>
-                      <span className="text-[10px]">🔋</span>
-                    </span>
-                  </div>
-
-                  <div className="absolute top-9 left-2.5 w-7 h-7 rounded-full bg-black/45 flex items-center justify-center">
-                    <ChevronLeft size={15} className="text-white" />
-                  </div>
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
-                    <span className="w-5 h-[3px] rounded-full bg-white/90" />
-                    <span className="w-1.5 h-[3px] rounded-full bg-white/40" />
-                    <span className="w-1.5 h-[3px] rounded-full bg-white/40" />
-                  </div>
-                </div>
+              <div className="h-[540px] overflow-y-auto scrollbar-none">
+                <HeaderCurveImage coverUrl={initialVenue.cover_url} height={140} />
 
                 <div className="p-3.5 space-y-3">
                   {/* Rewards / freemium notice */}
@@ -344,7 +326,7 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
                   {/* We offer */}
                   {amenities.length > 0 && (
                     <div className="space-y-1.5">
-                      <div className="text-xs font-semibold text-gray-900">We offer</div>
+                      <div className="text-xs font-semibold" style={{ color: GOLD }}>We offer</div>
                       <div className="flex flex-wrap gap-1.5">
                         {amenities.map(a => (
                           <span key={a} className="text-[10px] px-2.5 py-1 rounded-full bg-gray-50 border border-gray-200 text-gray-600">
@@ -389,7 +371,7 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
                   {initialVenue.lat != null && initialVenue.lng != null && (
                     <>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-gray-900">Get Directions to Us</span>
+                        <span className="text-xs font-semibold" style={{ color: GOLD }}>Get Directions to Us</span>
                         <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] font-medium" style={{ color: GOLD }}>
                           Open location
                         </a>
