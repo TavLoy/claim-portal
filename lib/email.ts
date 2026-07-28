@@ -89,8 +89,7 @@ function buildClaimEmailHtml({
     .body p { font-size: 15px; line-height: 1.6; color: #3d3d3a; margin: 0 0 16px; }
     .features { background: #FDF6E3; border-radius: 8px; padding: 20px; margin: 20px 0; border: 1px solid #f0dfa0; }
     .features p { font-size: 13px; font-weight: 600; color: #7a5c00; margin: 0 0 10px; }
-    .feature-item { font-size: 13px; color: #3d3d3a; margin: 0 0 6px; padding-left: 18px; position: relative; }
-    .feature-item::before { content: "✓"; position: absolute; left: 0; color: #16A34A; font-weight: 700; }
+    .feature-item { font-size: 13px; color: #3d3d3a; margin: 0 0 6px; }
     .disclaimer { font-size: 12px; color: #7a5c00; background: #FDF6E3; border-radius: 8px; padding: 12px 16px; margin: 20px 0; }
     .footer { padding: 20px 32px; border-top: 1px solid #e8e8e4; }
     .footer p { font-size: 12px; color: #888780; margin: 0 0 4px; line-height: 1.5; }
@@ -134,9 +133,9 @@ function buildClaimEmailHtml({
 
       <div class="features">
         <p>Your free listing includes:</p>
-        <div class="feature-item">Your venue profile on the TavLoy app</div>
-        <div class="feature-item">Basic traffic dashboard (views &amp; clicks)</div>
-        <div class="feature-item">Google Maps Integration</div>
+        <div class="feature-item"><span style="color:#16A34A;font-weight:700;">✓</span>&nbsp;Your venue profile on the TavLoy app</div>
+        <div class="feature-item"><span style="color:#16A34A;font-weight:700;">✓</span>&nbsp;Basic traffic dashboard (views &amp; clicks)</div>
+        <div class="feature-item"><span style="color:#16A34A;font-weight:700;">✓</span>&nbsp;Google Maps Integration</div>
       </div>
 
       <p style="text-align:center;font-weight:600;color:#1a1208;">Claim your FREE listing today.</p>
