@@ -2,16 +2,18 @@
 
 import { ChevronLeft } from 'lucide-react'
 
+const GOLD = '#CC9901'
+
 interface Props {
   coverUrl?: string | null
   height?: number
 }
 
 /**
- * Header photo with the wide symmetric scoop curve used across the live
- * app: both bottom corners sweep up with a large matching radius, meeting
- * near the middle where the carousel dot sits — a plain, single arc across
- * the width, not an asymmetric shape.
+ * Header photo matching the live app: bottom-RIGHT corner has one big,
+ * dramatic curve sweeping upward (large radius), while bottom-LEFT stays
+ * almost square — just a small soft corner, no scoop. Asymmetric, not
+ * mirrored. Traced with a thick gold stroke on the left/right/bottom edges.
  *
  * Shared between the admin Listing Preview and the public claim page so the
  * two never drift out of sync with each other again.
@@ -23,8 +25,11 @@ export default function HeaderCurveImage({ coverUrl, height = 160 }: Props) {
         className="relative bg-gray-900 overflow-hidden"
         style={{
           height,
-          borderBottomLeftRadius: height * 0.95,
-          borderBottomRightRadius: height * 0.95,
+          borderBottomRightRadius: height * 0.9,
+          borderBottomLeftRadius: 14,
+          borderLeft: `4px solid ${GOLD}`,
+          borderRight: `4px solid ${GOLD}`,
+          borderBottom: `4px solid ${GOLD}`,
         }}
       >
         {coverUrl ? (
