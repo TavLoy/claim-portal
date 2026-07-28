@@ -13,7 +13,8 @@ const HOSPITALITY_TYPES = [
 export async function searchPlaces(
   location: string,
   type: string,
-  radiusKm: number
+  radiusKm: number,
+  venueName?: string
 ): Promise<PlaceResult[]> {
   // Geocode the location string to lat/lng
   const geoRes = await client.geocode({
@@ -26,14 +27,21 @@ export async function searchPlaces(
 
   const { lat, lng } = geoRes.data.results[0].geometry.location
 
+  // If a specific venue name is given, search by name directly rather than
+  // by category — lets Mani target a known venue that a category+location
+  // search might not have surfaced.
+  const query = venueName ? `${venueName} ${location}` : `${type} near ${location}`
+
   // Text search for venues
   const searchRes = await client.textSearch({
     params: {
-      query: `${type} near ${location}`,
+      query,
       location: { lat, lng },
       radius: radiusKm * 1000,
+      // Don't constrain by Google's place `type` when searching by name —
+      // a hotel bar, for instance, might not be typed exactly as expected.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      type: mapVenueType(type) as any,
+      ...(venueName ? {} : { type: mapVenueType(type) as any }),
       key: API_KEY,
     }
   })
@@ -108,6 +116,7 @@ function mapVenueType(type: string): string {
     café: 'cafe',
     cafe: 'cafe',
     restaurant: 'restaurant',
+    hotel: 'lodging',
   }
   return map[type.toLowerCase()] || 'bar'
 }
