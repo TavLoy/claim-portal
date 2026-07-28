@@ -6,13 +6,14 @@ export async function GET(req: NextRequest) {
   const location = searchParams.get('location')
   const type = searchParams.get('type') || 'Pub'
   const radius = parseFloat(searchParams.get('radius') || '3')
+  const venueName = searchParams.get('venueName') || undefined
 
   if (!location) {
     return NextResponse.json({ error: 'location is required' }, { status: 400 })
   }
 
   try {
-    const results = await searchPlaces(location, type, radius)
+    const results = await searchPlaces(location, type, radius, venueName)
     return NextResponse.json({ results })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Search failed'
