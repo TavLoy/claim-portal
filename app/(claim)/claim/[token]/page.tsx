@@ -346,7 +346,7 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
 
 function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#111] flex flex-col items-center py-10 px-4">
+    <div className="min-h-screen bg-white flex flex-col items-center py-10 px-4">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/tavloy-logo-gold.png" alt="TavLoy" className="h-24 w-auto mb-8" />
       {children}
