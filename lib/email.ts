@@ -6,6 +6,15 @@ const FROM = `${process.env.RESEND_FROM_NAME} <${process.env.RESEND_FROM_EMAIL}>
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL!
 const INTERNAL_NOTIFY_EMAIL = 'msharma@blackjackmedia.co.uk'
 
+/** Google sometimes appends a disambiguating location to a venue's name,
+ *  e.g. "The Crown Hotel (West Bridgford)". Strip that for the venue-facing
+ *  email — it just reads as odd/redundant to the venue itself. Kept intact
+ *  on the internal notification email, where it's actually useful for
+ *  telling apart same-named venues across different sites. */
+function displayName(name: string): string {
+  return name.replace(/\s*\([^)]*\)\s*$/, '').trim()
+}
+
 export async function sendClaimEmail(venue: Venue): Promise<{ success: boolean; error?: string }> {
   if (!venue.email) {
     return { success: false, error: 'No email address for this venue' }
@@ -16,7 +25,7 @@ export async function sendClaimEmail(venue: Venue): Promise<{ success: boolean; 
   }
 
   const claimUrl = `${APP_URL}/claim/${venue.claim_token}`
-  const initials = getInitials(venue.name)
+  const initials = getInitials(displayName(venue.name))
 
   const html = buildClaimEmailHtml({ venue, claimUrl, initials })
 
@@ -114,7 +123,7 @@ function buildClaimEmailHtml({
               </td>
               <td style="width:16px;">&nbsp;</td>
               <td style="color:#ffffff;vertical-align:middle;">
-                <div style="font-size:17px;font-weight:600;margin-bottom:2px;">${venue.name}</div>
+                <div style="font-size:17px;font-weight:600;margin-bottom:2px;">${displayName(venue.name)}</div>
                 <div style="font-size:13px;opacity:0.85;">${venue.address}</div>
               </td>
             </tr>
@@ -124,9 +133,9 @@ function buildClaimEmailHtml({
     </table>
 
     <div class="body">
-      <p><strong>Put ${venue.name} in front of customers looking for their next favourite venue.</strong></p>
+      <p><strong>Put ${displayName(venue.name)} in front of customers looking for their next favourite venue.</strong></p>
       <p>TavLoy is changing the way people discover and engage with pubs, bars, cafés, restaurants, hotels and clubs across the UK. By claiming your FREE venue profile, you'll increase your visibility, attract new customers and give existing customers more reasons to come back.</p>
-      <p><strong>Is ${venue.name} listed yet?</strong></p>
+      <p><strong>Is ${displayName(venue.name)} listed yet?</strong></p>
       <p>Early adopters are already building their presence on TavLoy, growing followers and getting discovered first. Every day you wait is another opportunity for nearby venues to get ahead.</p>
       <p>Customers are already discovering venues on TavLoy. Don't let yours be the one they miss. Thousands of people will decide where to eat, drink and stay next. Make sure they find your venue first.</p>
       <p>Claiming your venue takes less than 5 minutes and is completely FREE.</p>
@@ -144,7 +153,7 @@ function buildClaimEmailHtml({
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px auto;">
         <tr>
           <td style="border-radius:8px;background-color:#CC9901;" align="center">
-            <a href="${claimUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:14px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;">Claim ${venue.name} →</a>
+            <a href="${claimUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:14px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;">Claim ${displayName(venue.name)} →</a>
           </td>
         </tr>
       </table>
