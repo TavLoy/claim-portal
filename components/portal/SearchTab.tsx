@@ -8,12 +8,13 @@ interface Props {
   onImported: (places: PlaceResult[]) => void
 }
 
-const VENUE_TYPES = ['Pub', 'Bar', 'Café', 'Restaurant']
+const VENUE_TYPES = ['Pub', 'Bar', 'Café', 'Restaurant', 'Hotel']
 
 export default function SearchTab({ onImported }: Props) {
   const [location, setLocation] = useState('')
   const [type, setType] = useState('Pub')
   const [radius, setRadius] = useState('3')
+  const [venueName, setVenueName] = useState('')
   const [loading, setLoading] = useState(false)
   const [importing, setImporting] = useState(false)
   const [results, setResults] = useState<PlaceResult[]>([])
@@ -26,9 +27,10 @@ export default function SearchTab({ onImported }: Props) {
     setLoading(true); setError(''); setResults([]); setSelected(new Set())
 
     try {
-      const res = await fetch(
-        `/api/places/search?location=${encodeURIComponent(location)}&type=${type}&radius=${radius}`
-      )
+      const params = new URLSearchParams({ location, type, radius })
+      if (venueName.trim()) params.set('venueName', venueName.trim())
+
+      const res = await fetch(`/api/places/search?${params.toString()}`)
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setResults(data.results)
@@ -72,6 +74,20 @@ export default function SearchTab({ onImported }: Props) {
     <div className="space-y-4">
       {/* Search controls */}
       <div className="bg-white border border-gray-200 rounded-xl p-5">
+        <div className="mb-3">
+          <label className="text-xs text-gray-500 mb-1 block">
+            Know the venue already? Search by name instead of category (optional)
+          </label>
+          <input
+            type="text"
+            value={venueName}
+            onChange={e => setVenueName(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSearch()}
+            placeholder="e.g. The Crown Hotel"
+            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+          />
+        </div>
+
         <div className="flex gap-3 mb-4">
           <input
             type="text"
@@ -84,7 +100,9 @@ export default function SearchTab({ onImported }: Props) {
           <select
             value={type}
             onChange={e => setType(e.target.value)}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
+            disabled={!!venueName.trim()}
+            title={venueName.trim() ? 'Category is ignored when searching by venue name' : undefined}
+            className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {VENUE_TYPES.map(t => <option key={t}>{t}</option>)}
           </select>
