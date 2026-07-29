@@ -5,9 +5,10 @@ import SearchTab from '@/components/portal/SearchTab'
 import QueueTab from '@/components/portal/QueueTab'
 import PreviewTab from '@/components/portal/PreviewTab'
 import SendClaimTab from '@/components/portal/SendClaimTab'
+import UnsubscribesTab from '@/components/portal/UnsubscribesTab'
 import type { Venue, PlaceResult } from '@/types'
 
-const TABS = ['Search', 'Review queue', 'Listing preview', 'Send claim']
+const TABS = ['Search', 'Review queue', 'Listing preview', 'Send claim', 'Unsubscribed']
 
 export default function PortalPage() {
   const [activeTab, setActiveTab] = useState(0)
@@ -61,6 +62,9 @@ export default function PortalPage() {
       )}
       {activeTab === 3 && (
         <SendClaimTab venue={selectedVenue} />
+      )}
+      {activeTab === 4 && (
+        <UnsubscribesTab />
       )}
     </div>
   )
