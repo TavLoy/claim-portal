@@ -171,7 +171,9 @@ function buildClaimEmailHtml({
 
     <div class="footer">
       <p>TavLoy · United Kingdom</p>
-      <p><a href="${unsubscribeUrl}">Unsubscribe</a> · <a href="https://www.tavloy.com/privacy-policy/">Privacy policy</a></p>
+      
+      <p><a href="${unsubscribeUrl}">Unsubscribe</a> · <a href="https://www.tavloy.com/claims-privacy-notice/">Privacy policy</a></p>
+      
     </div>
   </div>
 </body>
