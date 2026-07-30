@@ -332,6 +332,7 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
             <a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className="block rounded-lg overflow-hidden border border-gray-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                key={`${venue.id}-${venue.lat}-${venue.lng}`}
                 src={`/api/static-map?lat=${venue.lat}&lng=${venue.lng}&w=400&h=140`}
                 alt="Map"
                 className="w-full h-24 object-cover"
