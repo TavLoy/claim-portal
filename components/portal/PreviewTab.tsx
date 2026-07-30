@@ -272,7 +272,7 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
 
                   {/* Logo + name */}
                   <div className="flex items-start gap-2.5">
-                    <div className="w-11 h-11 rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold text-xs flex-shrink-0 overflow-hidden">
+                    <div className="w-16 h-16 rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold text-base flex-shrink-0 overflow-hidden">
                       {logoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={logoUrl} alt="Logo" className="w-full h-full object-contain bg-white" />
