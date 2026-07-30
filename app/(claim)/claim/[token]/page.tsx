@@ -246,7 +246,7 @@ function ListingCard({ venue, tierFreemium }: { venue: VenueData; tierFreemium?:
         )}
 
         <div className="flex items-start gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold text-[10px] flex-shrink-0 overflow-hidden">
+          <div className="w-[52px] h-[52px] rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold text-xs flex-shrink-0 overflow-hidden">
             {venue.logo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={venue.logo_url} alt="" className="w-full h-full object-contain bg-white" />
