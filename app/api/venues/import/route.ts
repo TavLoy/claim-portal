@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { getPlaceDetails, getPhotoUrl, generateTagline } from '@/lib/places'
+import { getPlaceDetails, getPhotoUrl, generateTagline, mapGoogleOpeningHours } from '@/lib/places'
 
 export async function POST(req: NextRequest) {
   const { place_ids } = await req.json()
@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
 
       const category = detectCategory(details.types || [])
       const tagline = generateTagline(name, city, category)
+      const openingHours = mapGoogleOpeningHours(details.opening_hours)
 
       const { data: venue, error } = await supabaseAdmin
         .from('venues')
@@ -61,6 +62,7 @@ export async function POST(req: NextRequest) {
           cover_url: coverUrl,
           category,
           tagline,
+          opening_hours: openingHours,
           status: 'pending',
           tier: 'freemium',
         })
