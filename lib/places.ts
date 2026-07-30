@@ -120,3 +120,40 @@ function mapVenueType(type: string): string {
   }
   return map[type.toLowerCase()] || 'bar'
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function mapGoogleOpeningHours(googleHours: any): Record<string, { open: string; close: string; closed?: boolean }> | null {
+  const periods = googleHours?.periods
+  if (!Array.isArray(periods) || periods.length === 0) return null
+
+  const DAY_KEYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+  const toHHMM = (t: string) => `${t.slice(0, 2)}:${t.slice(2, 4)}`
+
+  const result: Record<string, { open: string; close: string; closed?: boolean }> = {}
+  // Default every day to closed, then fill in from Google's periods
+  for (const key of DAY_KEYS) {
+    result[key] = { open: '', close: '', closed: true }
+  }
+
+  for (const period of periods) {
+    const openDay = period.open?.day
+    const openTime = period.open?.time
+    if (openDay === undefined || !openTime) continue
+
+    const dayKey = DAY_KEYS[openDay]
+
+    // A period with no `close` means open 24 hours that day
+    if (!period.close) {
+      result[dayKey] = { open: '00:00', close: '23:59', closed: false }
+      continue
+    }
+
+    result[dayKey] = {
+      open: toHHMM(openTime),
+      close: toHHMM(period.close.time),
+      closed: false,
+    }
+  }
+
+  return result
+}
