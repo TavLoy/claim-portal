@@ -379,6 +379,7 @@ export default function PreviewTab({ venue: initialVenue, onApprove }: Props) {
                       <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="block rounded-xl overflow-hidden border border-gray-100">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
+                          key={`${initialVenue.id}-${initialVenue.lat}-${initialVenue.lng}`}
                           src={`/api/static-map?lat=${initialVenue.lat}&lng=${initialVenue.lng}&w=400&h=140`}
                           alt="Map"
                           className="w-full h-24 object-cover"
