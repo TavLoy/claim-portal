@@ -53,6 +53,7 @@ export const config = {
     '/api/venues/approve',
     '/api/venues/send-claim',
     '/api/venues/send-reminders',
+    '/api/venues/preview-reminder',
     '/api/unsubscribes',
   ],
 }
