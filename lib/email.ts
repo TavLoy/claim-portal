@@ -83,14 +83,31 @@ export async function sendReminderEmail(
     return { success: false, error: 'Missing email or claim token' }
   }
 
+  const { subject, html } = buildReminderEmailHtml(venue, reminderNumber)
+
+  try {
+    await resend.emails.send({ from: FROM, to: venue.email, subject, html })
+    return { success: true }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
+  }
+}
+
+/** Builds the reminder email's subject + HTML without sending anything —
+ *  used both by sendReminderEmail above and by the preview route, so the
+ *  preview is always guaranteed to match exactly what actually gets sent. */
+export function buildReminderEmailHtml(
+  venue: Venue,
+  reminderNumber: 1 | 2 | 3
+): { subject: string; html: string } {
   const claimUrl = `${APP_URL}/claim/${venue.claim_token}`
   const name = displayName(venue.name)
-  const unsubscribeUrl = `${APP_URL}/unsubscribe?email=${encodeURIComponent(venue.email)}`
+  const unsubscribeUrl = `${APP_URL}/unsubscribe?email=${encodeURIComponent(venue.email || '')}`
 
   const variants = {
     1: {
       subject: `Quick nudge — ${name}'s free TavLoy listing is still waiting`,
-      preheader: 'Still under 5 minutes to claim, still completely free.',
       body: `
         <p>Just a quick one — we sent over a free TavLoy listing for <strong>${name}</strong> a few days ago, and it's still sitting there unclaimed.</p>
         <p>No pressure, just didn't want it to slip past you. Claiming takes under 5 minutes and costs nothing.</p>
@@ -98,7 +115,6 @@ export async function sendReminderEmail(
     },
     2: {
       subject: `More venues are joining TavLoy — is ${name} still missing out?`,
-      preheader: 'Nearby venues are already claiming their free listing.',
       body: `
         <p>TavLoy's user base keeps growing, and more venues are claiming their free listings every week — <strong>${name}</strong> still isn't one of them.</p>
         <p>The venues getting seen first are the ones who claimed early. It's still free, and still takes under 5 minutes.</p>
@@ -106,7 +122,6 @@ export async function sendReminderEmail(
     },
     3: {
       subject: `Final reminder — ${name}'s TavLoy listing link is expiring soon`,
-      preheader: 'This is the last reminder before the claim link expires.',
       body: `
         <p>This is the last reminder we'll send about this — after this, we'll assume you're not interested and won't follow up again.</p>
         <p>Your free listing for <strong>${name}</strong> is still unclaimed, and the link below will expire soon. If you'd like to be featured on TavLoy, now's the time.</p>
@@ -160,13 +175,7 @@ export async function sendReminderEmail(
 </body>
 </html>`
 
-  try {
-    await resend.emails.send({ from: FROM, to: venue.email, subject: variant.subject, html })
-    return { success: true }
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    return { success: false, error: message }
-  }
+  return { subject: variant.subject, html }
 }
 
 function buildClaimEmailHtml({
