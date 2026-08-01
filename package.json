@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.2",
+    "@netlify/functions": "^3.1.10",
     "@stripe/stripe-js": "^9.10.0",
     "@supabase/ssr": "^0.12.3",
     "@supabase/supabase-js": "^2.110.7",
