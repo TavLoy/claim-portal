@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import type { Venue } from '@/types'
+import type { Venue } from '../types'
 
 const resend = new Resend(process.env.RESEND_API_KEY!)
 const FROM = `${process.env.RESEND_FROM_NAME} <${process.env.RESEND_FROM_EMAIL}>`
@@ -69,6 +69,103 @@ export async function sendClaimNotification(venue: Venue, claimedByEmail: string
   } catch (err) {
     // Non-fatal — the claim itself already succeeded; just log it
     console.error('[sendClaimNotification] failed:', err)
+  }
+}
+
+/** Automated follow-up sequence for approved venues that haven't claimed
+ *  yet — day 3, day 7, day 14 after the original claim invite. Each stage
+ *  has distinct copy rather than repeating the same email three times. */
+export async function sendReminderEmail(
+  venue: Venue,
+  reminderNumber: 1 | 2 | 3
+): Promise<{ success: boolean; error?: string }> {
+  if (!venue.email || !venue.claim_token) {
+    return { success: false, error: 'Missing email or claim token' }
+  }
+
+  const claimUrl = `${APP_URL}/claim/${venue.claim_token}`
+  const name = displayName(venue.name)
+  const unsubscribeUrl = `${APP_URL}/unsubscribe?email=${encodeURIComponent(venue.email)}`
+
+  const variants = {
+    1: {
+      subject: `Quick nudge — ${name}'s free TavLoy listing is still waiting`,
+      preheader: 'Still under 5 minutes to claim, still completely free.',
+      body: `
+        <p>Just a quick one — we sent over a free TavLoy listing for <strong>${name}</strong> a few days ago, and it's still sitting there unclaimed.</p>
+        <p>No pressure, just didn't want it to slip past you. Claiming takes under 5 minutes and costs nothing.</p>
+      `,
+    },
+    2: {
+      subject: `More venues are joining TavLoy — is ${name} still missing out?`,
+      preheader: 'Nearby venues are already claiming their free listing.',
+      body: `
+        <p>TavLoy's user base keeps growing, and more venues are claiming their free listings every week — <strong>${name}</strong> still isn't one of them.</p>
+        <p>The venues getting seen first are the ones who claimed early. It's still free, and still takes under 5 minutes.</p>
+      `,
+    },
+    3: {
+      subject: `Final reminder — ${name}'s TavLoy listing link is expiring soon`,
+      preheader: 'This is the last reminder before the claim link expires.',
+      body: `
+        <p>This is the last reminder we'll send about this — after this, we'll assume you're not interested and won't follow up again.</p>
+        <p>Your free listing for <strong>${name}</strong> is still unclaimed, and the link below will expire soon. If you'd like to be featured on TavLoy, now's the time.</p>
+      `,
+    },
+  }
+
+  const variant = variants[reminderNumber]
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>${variant.subject}</title>
+  <style>
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f0; }
+    .wrapper { max-width: 560px; margin: 32px auto; background: #ffffff; border-radius: 12px; overflow: hidden; }
+    .header { background: #1a1208; padding: 24px 32px; }
+    .body { padding: 32px; }
+    .body p { font-size: 15px; line-height: 1.6; color: #3d3d3a; margin: 0 0 16px; }
+    .footer { padding: 20px 32px; border-top: 1px solid #e8e8e4; }
+    .footer p { font-size: 12px; color: #888780; margin: 0 0 4px; line-height: 1.5; }
+    .footer a { color: #7a5c00; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <img src="${APP_URL}/tavloy-logo-white.png" alt="TavLoy" width="130" style="display:block;" />
+    </div>
+    <div class="body">
+      ${variant.body}
+
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px auto;">
+        <tr>
+          <td style="border-radius:8px;background-color:#CC9901;" align="center">
+            <a href="${claimUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:14px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;">Claim ${name} →</a>
+          </td>
+        </tr>
+      </table>
+      <p style="font-size:12px;color:#a8a79f;text-align:center;margin-top:-8px;">
+        Button not working? Paste this link into your browser:<br />
+        <a href="${claimUrl}" style="color:#7a5c00;word-break:break-all;">${claimUrl}</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>TavLoy · United Kingdom</p>
+      <p><a href="${unsubscribeUrl}">Unsubscribe</a> · <a href="https://www.tavloy.com/claims-privacy-notice/">Privacy policy</a></p>
+    </div>
+  </div>
+</body>
+</html>`
+
+  try {
+    await resend.emails.send({ from: FROM, to: venue.email, subject: variant.subject, html })
+    return { success: true }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return { success: false, error: message }
   }
 }
 
@@ -171,9 +268,7 @@ function buildClaimEmailHtml({
 
     <div class="footer">
       <p>TavLoy · United Kingdom</p>
-      
       <p><a href="${unsubscribeUrl}">Unsubscribe</a> · <a href="https://www.tavloy.com/claims-privacy-notice/">Privacy policy</a></p>
-      
     </div>
   </div>
 </body>
