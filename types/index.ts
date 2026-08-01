@@ -31,6 +31,7 @@ export interface Venue {
   category: string
   opening_hours: OpeningHours | null
   amenities: string[] | null
+  reminder_count: number
 
   // Status
   status: VenueStatus
